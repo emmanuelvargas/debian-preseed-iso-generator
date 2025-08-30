@@ -8,26 +8,28 @@ To use this script, you need to install the following packages:
 
     $ sudo apt install wget curl p7zip-full genisoimage syslinux-utils
 
-## TODO
-- help in bash
-- add options
-- move server variable to .env
-- allow possibility to have a different preseed if not a server (VM for example) ?
-- repair authorized_key (need to copy on ISO first)
-    ```
-    function add_static_to_cdrom() {
-        progress "Adding ./static content to ISO /preseed..."
+## Usage
 
-        local static
-        static="./cdrom"
-        install -d -m 755 "$isofiles/preseed"
-        (
-            cd "$static"
-            find . -name \* -a ! \( -name \*~ -o -name \*.bak -o -name \*.orig \) -print0
-        ) | cpio -v -p -L -0 -D "$static" "$isofiles/preseed"
-        chmod -w -R "$isofiles/preseed"
-    }
-    ```
-- change boot option on iso (menu grub)
-- rework following https://github.com/lboulard/debian-preseed/blob/master/make-preseed-iso.sh
+```
+Usage: debian-preseed-iso-generator.sh -n server_name -i ip_address/cidr -g gateway -d dns_ip
+
+  -n server_name
+      Name of the server to install
+  -i ip_address/cidr
+      IP address of the server to install on format ip/cidr (ex: 192.168.0.200/24)
+  -g gateway
+      network gateway
+  -d dns_ip
+      DNS Ip address
+```
+
+an ISO image file is generated into `ISOs/server_name`
+
+## TODO
+- allow possibility to have a different preseed if not a server (VM for example) ?
 - dockerise?
+
+## Note
+Based on the projects
+- https://github.com/bergmann-max/debian-preseed-iso-generator/
+- https://github.com/lboulard/debian-preseed
