@@ -216,7 +216,7 @@ xorriso -as mkisofs -o "${ISOFILE}" -J -J -joliet-long -cache-inodes \
 
 # Clean up temporary directory
 # sudo is needed because some of the files in the ISO tmp will not be deleted
-#sudo rm --recursive --force "${ISOFILEDIR}"
-#sudo rm ../../preseed.cfg.tmp
+sudo rm --recursive --force "${ISOFILEDIR}"
+sudo rm ../../preseed.cfg.tmp
 
 popd > /dev/null
