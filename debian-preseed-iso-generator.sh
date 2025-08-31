@@ -166,13 +166,16 @@ sudo rm --force "${ISOFILE}"
 # Extract ISO contents
 7z x "../../${ISO_FILE}" -o"${ISOFILEDIR}"
 
+PRESEEDFILE="../../Files/preseed.cfg"
+PRESEEDFILETMP="../../Files/preseed.cfg.tmp"
+
 # Modify initrd with preseed.cfg
 chmod --recursive +w "${ISOFILEDIR}/install.amd/"
 gunzip "${ISOFILEDIR}/install.amd/initrd.gz"
-cp ../../preseed.cfg ../../preseed.cfg.tmp
-sed -i "s/SRVNET_IP/${SRVNET_IP}/g; s/SRVNET_MASK/${SRVNET_MASK}/g; s/SRVNET_GW/${SRVNET_GW}/g; s/SRVNET_DNS/${SRVNET_DNS}/g; s/SRVNAME/${SRVNAME}/g" ../../preseed.cfg
-echo ../../preseed.cfg | cpio --format=newc --create --append --file="${ISOFILEDIR}/install.amd/initrd"
-cp ../../preseed.cfg.tmp ../../preseed.cfg
+cp ${PRESEEDFILE} ${PRESEEDFILETMP}
+sed -i "s/SRVNET_IP/${SRVNET_IP}/g; s/SRVNET_MASK/${SRVNET_MASK}/g; s/SRVNET_GW/${SRVNET_GW}/g; s/SRVNET_DNS/${SRVNET_DNS}/g; s/SRVNAME/${SRVNAME}/g" ${PRESEEDFILE}
+echo ${PRESEEDFILE} | cpio --format=newc --create --append --file="${ISOFILEDIR}/install.amd/initrd"
+cp ${PRESEEDFILETMP} ${PRESEEDFILE}
 
 # add static files to cdrom
 STATIC="./cdrom"
@@ -217,6 +220,6 @@ xorriso -as mkisofs -o "${ISOFILE}" -J -J -joliet-long -cache-inodes \
 # Clean up temporary directory
 # sudo is needed because some of the files in the ISO tmp will not be deleted
 sudo rm --recursive --force "${ISOFILEDIR}"
-sudo rm ../../preseed.cfg.tmp
+sudo rm ${PRESEEDFILETMP}
 
 popd > /dev/null
